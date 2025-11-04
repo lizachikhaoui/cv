@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les Gardiens de l’Ombre - Description du jeu</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #0e0e0e;
+      color: #f5f5f5;
+      margin: 40px;
+      line-height: 1.7;
+    }
+
+    h1, h2 {
+      color: #ffcc00;
+    }
+
+    h1 {
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    section {
+      background: #1a1a1a;
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 900px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+    }
+
+    ul {
+      margin-left: 20px;
+    }
+
+    a.button {
+      display: inline-block;
+      margin-top: 20px;
+      background-color: #ffcc00;
+      color: #000;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    a.button:hover {
+      background-color: #ffd633;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: #444;
+      margin: 30px 0;
+    }
+  </style>
+</head>
+<body>
+
+<section>
+  <h1>🌑 Les Gardiens de l’Ombre</h1>
+
+  <p>
+    <strong>Les Gardiens de l’Ombre</strong> est un jeu d’action-aventure en 2D qui mélange 
+    <em>exploration, stratégie et combats</em> dans un univers mystérieux dominé par les ténèbres. 
+    Vous incarnez un gardien chargé de restaurer la lumière dans un monde dévasté par les créatures de l’ombre.
+  </p>
+
+  <hr>
+
+  <h2>🎮 Gameplay</h2>
+  <ul>
+    <li>Explorez des ruines anciennes et des forêts hantées à la recherche d’artefacts lumineux.</li>
+    <li>Affrontez des ennemis corrompus grâce à vos pouvoirs élémentaires.</li>
+    <li>Résolvez des énigmes pour rétablir l’équilibre entre la lumière et l’ombre.</li>
+    <li>Améliorez vos compétences et débloquez de nouveaux gardiens au fil de votre progression.</li>
+  </ul>
+
+  <hr>
+
+  <h2>🌌 Univers</h2>
+  <p>
+    Le jeu se déroule dans le royaume déchu d’<strong>Elunara</strong>, un monde autrefois prospère 
+    plongé dans la nuit éternelle. Chaque région que vous traversez révèle une partie de l’histoire 
+    oubliée des anciens gardiens et des secrets cachés de la lumière.
+  </p>
+
+  <hr>
+
+  <h2>⚙️ Caractéristiques principales</h2>
+  <ul>
+    <li>Style graphique sombre et atmosphérique inspiré des mythes nordiques.</li>
+    <li>Bande-son immersive et ambient.</li>
+    <li>Système de combat fluide mêlant esquives, attaques et pouvoirs magiques.</li>
+    <li>Compatible Windows, macOS et Linux.</li>
+  </ul>
+
+  <hr>
+
+  <h2>💡 Objectif</h2>
+  <p>
+    Ramenez la lumière dans les terres perdues, affrontez la corruption et devenez le dernier Gardien 
+    capable de sauver l’équilibre du monde.
+  </p>
+
+  <div class="center">
+    <a href="#" class="button">▶️ Jouer maintenant</a>
+  </div>
+
+</section>
+
+</body>
+</html>
+
+
+
