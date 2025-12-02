@@ -1,4 +1,4 @@
-# 📚 Projet de Codage : Lecture Assistée Bilingue (L.A.B.)
+#  Projet de Codage : Lecture Assistée Bilingue (L.A.B.)
 
 ## Idée du projet :
 Créer une interface web de lecture de livres français où l'utilisateur peut **cliquer sur n'importe quel mot pour afficher sa traduction instantanée** (vers l'anglais, par exemple).
