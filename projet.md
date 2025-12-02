@@ -15,8 +15,6 @@ Ce projet vise à améliorer l'accessibilité des textes et à fluidifier l'appr
 | **Traduire en temps réel** | Requêtes **Asynchrones (fetch)** vers une API de traduction publique. | Non applicable. |
 | **Amélioration de l'UX/UI** | **anime.js** | Animation fluide de l'apparition et de la disparition du *tooltip* (fondu + glissement). Animation de feedback visuel (zoom) sur le mot cliqué. |
 
-**Statut :** Le projet est entièrement fonctionnel.
-
 ---
 
 ## Technologies Utilisées :
