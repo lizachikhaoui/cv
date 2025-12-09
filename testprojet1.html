@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Projet - Lecture Assistée Bilingue (L.A.B.)</title>
-    
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         body {
             font-family: 'Georgia', serif;
@@ -70,6 +70,7 @@
         <p id="texte-a-traduire" class="texte-lecture">
             Le vent sifflait sur les toits de Paris. C'était un jour froid et brumeux, parfait pour s'évader dans un bon livre. Il prit son vieux manteau et descendit l'escalier, prêt à explorer les quais de la Seine.
         </p>
+        <bouton onclick="changeTexte()">Changer de texte</button>
     </div>
 
     <div id="traduction-tooltip" class="tooltip">
@@ -80,8 +81,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+
+        let textes = [];
+        d3.csv("chants-joyeux.csv").then(data => {
+            textes = data;
+            changeTexte();
+        });
+
+        function changeTexte() {
             const texteElement = document.getElementById('texte-a-traduire');
+            const randomIndex = Math.floor(Math.random() * textes.length);
+            const texteChoisi = textes[randomIndex].txt; 
+            texteElement.textContent = texteChoisi;
             const tooltip = document.getElementById('traduction-tooltip');
             
             const texteOriginal = texteElement.innerHTML;
@@ -188,7 +199,7 @@
             }
             
             masquerTraduction(); 
-        });
+        }
     </script>
 </body>
 </html>
