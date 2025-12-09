@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Projet - Lecture Assistée Bilingue (L.A.B.)</title>
+    
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f8f8f8;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .livre-conteneur {
+            width: 90%;
+            max-width: 800px;
+            line-height: 1.6;
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Style des mots cliquables */
+        .mot-cliquable {
+            cursor: help; 
+            text-decoration: underline dotted #007bff;
+            display: inline-block; 
+        }
+
+        /* Style du Tooltip de Traduction */
+        .tooltip {
+            position: absolute; 
+            background-color: #007bff;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none; 
+            transform: translate(-50%, -100%); 
+        }
+
+        .tooltip .mot-original {
+            font-style: italic;
+            margin-right: 5px;
+            opacity: 0.8;
+        }
+
+        .tooltip .traduction {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="livre-conteneur">
+        <h1>Le Rêve du Voyageur - Exemple de Code</h1>
+        <p id="texte-a-traduire" class="texte-lecture">
+            Le vent sifflait sur les toits de Paris. C'était un jour froid et brumeux, parfait pour s'évader dans un bon livre. Il prit son vieux manteau et descendit l'escalier, prêt à explorer les quais de la Seine.
+        </p>
+    </div>
+
+    <div id="traduction-tooltip" class="tooltip">
+        <span class="mot-original"></span>
+        <span class="traduction"></span>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const texteElement = document.getElementById('texte-a-traduire');
+            const tooltip = document.getElementById('traduction-tooltip');
+            
+            const texteOriginal = texteElement.innerHTML;
+            
+            // --- Fonction de préparation du DOM ---
+            function genererMotsCliquables(texte) {
+                const mots = texte.split(/(\s+|[,.;:!?"]+)/);
+                let nouveauHTML = '';
+
+                mots.forEach(partie => {
+                    if (partie.trim() !== '' && !/^[.,;!?"'-]+$/.test(partie)) {
+                        nouveauHTML += `<span class="mot-cliquable">${partie}</span>`;
+                    } else {
+                        nouveauHTML += partie;
+                    }
+                });
+                return nouveauHTML;
+            }
+
+            texteElement.innerHTML = genererMotsCliquables(texteOriginal);
+
+            // --- Fonction API ---
+            const LANGUE_CIBLE = 'en'; 
+
+            async function traduireMot(mot) {
+                const motEncode = encodeURIComponent(mot); 
+                const urlAPI = `https://api.mymemory.translated.net/get?q=${motEncode}&langpair=fr|${LANGUE_CIBLE}`;
+
+                try {
+                    const reponse = await fetch(urlAPI);
+                    const data = await reponse.json();
+                    if (data.responseStatus === 200 && data.responseData.translatedText) {
+                        return data.responseData.translatedText;
+                    } else {
+                        return "Erreur de traduction API.";
+                    }
+                } catch (error) {
+                    return "Impossible de contacter le service de traduction.";
+                }
+            }
+            
+            // --- Gestion du Clic ---
+            texteElement.addEventListener('click', (event) => {
+                if (event.target.classList.contains('mot-cliquable')) {
+                    const motClique = event.target.textContent.trim();
+                    afficherTraduction(event.target, motClique);
+                } else {
+                    masquerTraduction();
+                }
+            });
+
+            // --- Fonctions d'Animation ---
+            async function afficherTraduction(elementClique, mot) { 
+                
+                // 1. Démarrage : Afficher "Chargement..."
+                tooltip.querySelector('.traduction').textContent = "Chargement...";
+                
+                // 2. Appel de l'API réel et attente du résultat
+                const traduction = await traduireMot(mot); 
+                
+                // 3. Déterminer la position
+                const rect = elementClique.getBoundingClientRect();
+
+                // 4. Mettre à jour le contenu du tooltip
+                tooltip.querySelector('.mot-original').textContent = mot + ' :';
+                tooltip.querySelector('.traduction').textContent = traduction;
+                
+                // 5. Positionner le tooltip
+                tooltip.style.left = `${rect.left + rect.width / 2}px`;
+                tooltip.style.top = `${rect.top + window.scrollY}px`;
+
+                // 6. Animer l'apparition avec anime.js 
+                anime.remove(tooltip); 
+                anime({
+                    targets: tooltip,
+                    opacity: [0, 1],
+                    translateY: ['-100%', '-120%'], 
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+                
+                // 7. Animer le mot cliqué
+                anime({
+                    targets: elementClique,
+                    scale: [1, 1.1, 1], 
+                    color: ['#007bff', '#333'], 
+                    duration: 500,
+                    easing: 'easeInOutSine'
+                });
+            }
+
+            function masquerTraduction() {
+                anime.remove(tooltip);
+                anime({
+                    targets: tooltip,
+                    opacity: 0,
+                    translateY: '-90%', 
+                    duration: 200,
+                    easing: 'easeInQuad',
+                    complete: () => {
+                        tooltip.style.pointerEvents = 'none';
+                    }
+                });
+            }
+            
+            masquerTraduction(); 
+        });
+    </script>
+</body>
+</html>
