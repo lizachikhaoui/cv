@@ -22,6 +22,44 @@
     <script src="script.js"></script>
 </body>
 </html>
+
+// Texte à afficher
+const texts = {
+    grandDieu: [
+        "Grand Dieu puissant, nous célébrons",
+        "Ta gloire auguste et ta justice ;",
+        "Devant ton trône nous chantons,",
+        "Rachetés par ton sacrifice."
+    ],
+    appelez: [
+        "Le temps s’enfuit, le Sauveur vous appelle,",
+        "Pécheurs, venez, répondez à sa voix :",
+        "Pour recevoir la couronne immortelle,",
+        "Que Jésus donne à toute âme qui croit."
+    ],
+    jesus: [
+        "Jésus, doux Maître,",
+        "Règne sur moi,",
+        "Soumets mon être,",
+        "Sois-en le Roi ;"
+    ]
+};
+
+// Fonction pour afficher le texte avec animation
+function showText(key) {
+    const display = document.getElementById("textDisplay");
+    const lines = texts[key];
+    display.innerHTML = ""; // Vide le contenu précédent
+
+    lines.forEach((line, index) => {
+        const p = document.createElement("p");
+        p.textContent = line;
+        // On ajoute un délai pour l'animation séquentielle
+        p.style.animationDelay = `${index * 0.5}s`;
+        display.appendChild(p);
+    });
+}
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f0f0f8;
@@ -81,19 +119,4 @@ body {
 .buttons button:hover {
     background-color: #2962ff;
 }
-// Texte à afficher
-const texts = {
-    grandDieu: [
-        "Grand Dieu puissant, nous célébrons",
-        "Ta gloire auguste et ta justice ;",
-        "Devant ton trône nous chantons,",
-        "Rachetés par ton sacrifice."
-    ],
-    appelez: [
-        "Le temps s’enfuit, le Sauveur vous appelle,",
-        "Pécheurs, venez, répondez à sa voix :",
-        "Pour recevoir la couronne immortelle,",
-        "Que Jésus donne à toute âme qui croit."
-    ],
-    jesus: [
-    
+
