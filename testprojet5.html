@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chants joyeux</title>
-
+<title>Chants joyeux - Karaoké synchronisé</title>
 <style>
 body {
     font-family: Arial;
@@ -58,7 +57,6 @@ button:hover {
 </style>
 </head>
 <body>
-
 <div class="container">
     <h1>Chants joyeux</h1>
 
@@ -66,7 +64,8 @@ button:hover {
         Cliquez sur <strong>Activer la musique</strong> puis choisissez un chant.
     </div>
 
-    <button onclick="enableMusic()" style="background:#28a745;">🎵 Activer la musique</button>
+    <!-- Bouton musique -->
+    <button id="enableMusicBtn" style="background:#28a745;">🎵 Activer la musique</button>
 
     <div id="buttonsContainer"></div>
 
@@ -78,27 +77,23 @@ button:hover {
 </div>
 
 <script>
-/* 🎵 MUSIQUE LIBRE */
+/* Musique de fond */
 const music = new Audio("https://cdn.pixabay.com/download/audio/2023/03/02/audio_8c00b6fe26.mp3?filename=gentle-piano-hymn-142090.mp3");
-music.preload = "auto";
 music.loop = true;
 music.volume = 1;
-
-/* ⚠️ Bloqué tant que l’utilisateur n’a pas cliqué */
 let musicEnabled = false;
 
-function enableMusic() {
-    music.play()
-        .then(() => {
-            music.pause();
-            music.currentTime = 0;
-            musicEnabled = true;
-            alert("🎵 Musique activée ! Vous pouvez maintenant choisir un chant.");
-        })
-        .catch(() => alert("Touchez à nouveau le bouton pour activer la musique."));
-}
+/* Bouton activer musique */
+document.getElementById("enableMusicBtn").onclick = () => {
+    music.play().then(() => {
+        music.pause();
+        music.currentTime = 0;
+        musicEnabled = true;
+        document.getElementById("enableMusicBtn").style.display = "none";
+    });
+};
 
-/* TEXTES */
+/* Textes */
 const texts = {
     grandDieu: [
         "Grand Dieu puissant, nous célébrons",
@@ -120,7 +115,7 @@ const texts = {
     ]
 };
 
-/* CRÉATION DES BOUTONS */
+/* Création des boutons pour chaque chant */
 const btns = document.getElementById("buttonsContainer");
 for (let key in texts) {
     let b = document.createElement("button");
@@ -131,16 +126,11 @@ for (let key in texts) {
 
 let timeouts = [];
 
-/* MUSIQUE + LECTURE */
+/* Fonction principale : karaoké synchronisé */
 function startSong(key) {
-
-    if (!musicEnabled) {
-        alert("🎵 Activez d'abord la musique avec le bouton vert !");
-        return;
-    }
+    if (!musicEnabled) return;
 
     stopAll();
-
     music.play();
 
     const display = document.getElementById("textDisplay");
@@ -156,7 +146,6 @@ function startSong(key) {
     });
 
     const elems = document.querySelectorAll(".karaoke-line");
-
     let i = 0;
 
     function nextLine() {
@@ -165,12 +154,15 @@ function startSong(key) {
         elems.forEach(e => e.classList.remove("active-line"));
         elems[i].classList.add("active-line");
 
+        /* Lecture vocale TTS */
         const say = new SpeechSynthesisUtterance(lines[i]);
         say.lang = "fr-FR";
         say.pitch = 1.1;
         say.rate = 0.9;
-
         speechSynthesis.speak(say);
+
+        /* Défilement automatique */
+        elems[i].scrollIntoView({behavior:"smooth", block:"center"});
 
         i++;
         timeouts.push(setTimeout(nextLine, 2400));
@@ -179,10 +171,10 @@ function startSong(key) {
     nextLine();
 }
 
-/* CONTROLES */
+/* Contrôles */
 function pauseAll() {
     speechSynthesis.pause();
-    music.pause();
+    if (musicEnabled) music.pause();
 }
 function resumeAll() {
     speechSynthesis.resume();
@@ -194,7 +186,6 @@ function stopAll() {
         music.pause();
         music.currentTime = 0;
     }
-
     timeouts.forEach(t => clearTimeout(t));
     timeouts = [];
 }
