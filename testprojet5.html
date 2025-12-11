@@ -84,12 +84,16 @@
 </div>
 
 <script>
-    // --- MUSIQUE CHRÉTIENNE LIBRE DE DROITS ---
+    // 🔊 MUSIQUE CHRÉTIENNE INSTRUMENTALE
+    // 100% libre de droits
     const music = new Audio("https://cdn.pixabay.com/download/audio/2023/03/02/audio_8c00b6fe26.mp3?filename=gentle-piano-hymn-142090.mp3");
     music.loop = true;
     music.volume = 0.7;
 
-    // --- TEXTES ---
+    // Pour forcer le chargement avant lecture
+    music.preload = "auto";
+
+    // TEXTES
     const texts = {
         grandDieu: [
             "Grand Dieu puissant, nous célébrons",
@@ -111,7 +115,7 @@
         ]
     };
 
-    // --- BOUTONS ---
+    // BOUTONS
     const container = document.getElementById("buttonsContainer");
     Object.keys(texts).forEach(key => {
         const btn = document.createElement("button");
@@ -123,14 +127,16 @@
     let currentTimeouts = [];
 
     function startSong(key) {
-        stopSong();
+        stopSong(); // reset propre
+
+        // → IMPORTANT : lancement de la musique APRÈS clic
+        music.play().catch(err => console.log("Autoplay bloqué:", err));
 
         const display = document.getElementById("textDisplay");
         display.innerHTML = "";
 
         const lines = texts[key];
 
-        // Affichage karaoké
         lines.forEach(line => {
             const p = document.createElement("p");
             p.className = "karaoke-line";
@@ -157,7 +163,6 @@
             currentTimeouts.push(setTimeout(singLine, 2500));
         }
 
-        music.play();
         singLine();
     }
 
