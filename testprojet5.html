@@ -3,188 +3,180 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Champs joyeux</title>
+<title>Chants joyeux - Musique + Voix</title>
 
 <style>
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #eef2ff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-    }
-
-    .container {
-        background: white;
-        padding: 30px 50px;
-        border-radius: 15px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        max-width: 700px;
-        text-align: center;
-    }
-
-    .text-box {
-        background-color: #eef;
-        border-left: 5px solid #88f;
-        padding: 20px;
-        margin: 20px 0;
-        min-height: 150px;
-        font-size: 1.1em;
-        line-height: 1.6em;
-        text-align: left;
-        overflow-y: auto;
-        max-height: 300px;
-    }
-
-    .karaoke-line {
-        opacity: 0.4;
-        transition: 0.3s;
-        padding: 3px 0;
-    }
-
-    .active-line {
-        background: yellow;
-        opacity: 1 !important;
-        font-weight: bold;
-    }
-
-    .buttons button {
-        padding: 12px 25px;
-        margin: 5px;
-        font-size: 1em;
-        border-radius: 8px;
-        border: none;
-        cursor: pointer;
-        background: #448aff;
-        color: white;
-        transition: 0.3s;
-    }
-
-    .buttons button:hover {
-        background: #2962ff;
-    }
+body {
+    font-family: Arial, sans-serif;
+    background: #eaf0ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 700px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    text-align: center;
+}
+.text-box {
+    background: #eef;
+    border-left: 4px solid #77f;
+    padding: 20px;
+    margin: 20px 0;
+    min-height: 150px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.karaoke-line {
+    opacity: 0.4;
+    transition: .3s;
+    padding: 4px;
+}
+.active-line {
+    background: yellow;
+    opacity: 1 !important;
+    font-weight: bold;
+}
+button {
+    padding: 12px 25px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    background: #448aff;
+    color: white;
+    cursor: pointer;
+}
+button:hover {
+    background: #2962ff;
+}
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Champs joyeux</h1>
+    <h1>Chants joyeux</h1>
 
-    <div id="textDisplay" class="text-box">Clique sur un bouton pour commencer.</div>
+    <div id="textDisplay" class="text-box">
+        Cliquez sur un chant pour commencer.
+    </div>
 
-    <div class="buttons" id="buttonsContainer"></div>
+    <div id="buttonsContainer"></div>
 
     <div class="buttons">
-        <button onclick="pauseSong()">Pause</button>
-        <button onclick="resumeSong()">Reprendre</button>
-        <button onclick="stopSong()">Stop</button>
+        <button onclick="pauseAll()">Pause</button>
+        <button onclick="resumeAll()">Reprendre</button>
+        <button onclick="stopAll()">Stop</button>
     </div>
 </div>
 
 <script>
-    // 🔊 MUSIQUE CHRÉTIENNE INSTRUMENTALE
-    // 100% libre de droits
-    const music = new Audio("https://cdn.pixabay.com/download/audio/2023/03/02/audio_8c00b6fe26.mp3?filename=gentle-piano-hymn-142090.mp3");
-    music.loop = true;
-    music.volume = 0.7;
+/* 🎵 MUSIQUE 100% LIBRE DE DROITS */
+const music = new Audio("https://cdn.pixabay.com/download/audio/2023/03/02/audio_8c00b6fe26.mp3?filename=gentle-piano-hymn-142090.mp3");
+music.preload = "auto";
+music.loop = true;
+music.volume = 1;
 
-    // Pour forcer le chargement avant lecture
-    music.preload = "auto";
+/* 📜 TEXTES */
+const texts = {
+    grandDieu: [
+        "Grand Dieu puissant, nous célébrons",
+        "Ta gloire auguste et ta justice ;",
+        "Devant ton trône nous chantons,",
+        "Rachetés par ton sacrifice."
+    ],
+    appelez: [
+        "Le temps s’enfuit, le Sauveur vous appelle,",
+        "Pécheurs, venez, répondez à sa voix :",
+        "Pour recevoir la couronne immortelle,",
+        "Que Jésus donne à toute âme qui croit."
+    ],
+    jesus: [
+        "Jésus, doux Maître,",
+        "Règne sur moi,",
+        "Soumets mon être,",
+        "Sois-en le Roi."
+    ]
+};
 
-    // TEXTES
-    const texts = {
-        grandDieu: [
-            "Grand Dieu puissant, nous célébrons",
-            "Ta gloire auguste et ta justice ;",
-            "Devant ton trône nous chantons,",
-            "Rachetés par ton sacrifice."
-        ],
-        appelez: [
-            "Le temps s’enfuit, le Sauveur vous appelle,",
-            "Pécheurs, venez, répondez à sa voix :",
-            "Pour recevoir la couronne immortelle,",
-            "Que Jésus donne à toute âme qui croit."
-        ],
-        jesus: [
-            "Jésus, doux Maître,",
-            "Règne sur moi,",
-            "Soumets mon être,",
-            "Sois-en le Roi."
-        ]
-    };
+/* 🔘 CRÉATION DES BOUTONS */
+const btns = document.getElementById("buttonsContainer");
+for (let key in texts) {
+    let b = document.createElement("button");
+    b.textContent = key;
+    b.onclick = () => startSong(key);  // musique + voix dans le même clic
+    btns.appendChild(b);
+}
 
-    // BOUTONS
-    const container = document.getElementById("buttonsContainer");
-    Object.keys(texts).forEach(key => {
-        const btn = document.createElement("button");
-        btn.textContent = key;
-        btn.onclick = () => startSong(key);
-        container.appendChild(btn);
+let timeouts = [];
+
+/* 🎤 LECTURE + MUSIQUE (fonctionne sur téléphone) */
+function startSong(key) {
+
+    stopAll(); // reset
+
+    // 👉 OBLIGATOIRE : lancer la musique sur *le même clic*
+    music.play().catch(() => {
+        alert("Touchez l’écran encore une fois pour autoriser la musique !");
     });
 
-    let currentTimeouts = [];
+    const display = document.getElementById("textDisplay");
+    display.innerHTML = "";
 
-    function startSong(key) {
-        stopSong(); // reset propre
+    const lines = texts[key];
 
-        // → IMPORTANT : lancement de la musique APRÈS clic
-        music.play().catch(err => console.log("Autoplay bloqué:", err));
+    lines.forEach(l => {
+        const p = document.createElement("p");
+        p.className = "karaoke-line";
+        p.textContent = l;
+        display.appendChild(p);
+    });
 
-        const display = document.getElementById("textDisplay");
-        display.innerHTML = "";
+    const elems = document.querySelectorAll(".karaoke-line");
 
-        const lines = texts[key];
+    let i = 0;
 
-        lines.forEach(line => {
-            const p = document.createElement("p");
-            p.className = "karaoke-line";
-            p.textContent = line;
-            display.appendChild(p);
-        });
+    function nextLine() {
+        if (i >= lines.length) return;
 
-        const lineElements = document.querySelectorAll(".karaoke-line");
-        let index = 0;
+        elems.forEach(e => e.classList.remove("active-line"));
+        elems[i].classList.add("active-line");
 
-        function singLine() {
-            if (index >= lines.length) return;
+        const say = new SpeechSynthesisUtterance(lines[i]);
+        say.lang = "fr-FR";
+        say.pitch = 1.1;
+        say.rate = 0.9;
+        speechSynthesis.speak(say);
 
-            lineElements.forEach(l => l.classList.remove("active-line"));
-            lineElements[index].classList.add("active-line");
-
-            const utter = new SpeechSynthesisUtterance(lines[index]);
-            utter.lang = "fr-FR";
-            utter.pitch = 1.4;
-            utter.rate = 0.9;
-            speechSynthesis.speak(utter);
-
-            index++;
-            currentTimeouts.push(setTimeout(singLine, 2500));
-        }
-
-        singLine();
+        i++;
+        timeouts.push(setTimeout(nextLine, 2400));
     }
 
-    function pauseSong() {
-        speechSynthesis.pause();
-        music.pause();
-    }
+    nextLine();
+}
 
-    function resumeSong() {
-        speechSynthesis.resume();
-        music.play();
-    }
+/* CONTROLES */
+function pauseAll() {
+    speechSynthesis.pause();
+    music.pause();
+}
+function resumeAll() {
+    speechSynthesis.resume();
+    music.play();
+}
+function stopAll() {
+    speechSynthesis.cancel();
+    music.pause();
+    music.currentTime = 0;
 
-    function stopSong() {
-        speechSynthesis.cancel();
-        music.pause();
-        music.currentTime = 0;
-
-        currentTimeouts.forEach(t => clearTimeout(t));
-        currentTimeouts = [];
-    }
+    timeouts.forEach(t => clearTimeout(t));
+    timeouts = [];
+}
 </script>
-
 </body>
 </html>
