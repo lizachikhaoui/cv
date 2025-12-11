@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chants joyeux</title>
+<title>Chants joyeux - Musique + Voix</title>
 
 <style>
 body {
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background: #eaf0ff;
     display: flex;
     justify-content: center;
@@ -63,8 +63,10 @@ button:hover {
     <h1>Chants joyeux</h1>
 
     <div id="textDisplay" class="text-box">
-        Cliquez sur un chant pour commencer.
+        Cliquez sur <strong>Activer la musique</strong> puis choisissez un chant.
     </div>
+
+    <button onclick="enableMusic()" style="background:#28a745;">🎵 Activer la musique</button>
 
     <div id="buttonsContainer"></div>
 
@@ -76,13 +78,27 @@ button:hover {
 </div>
 
 <script>
-/* 🎵 MUSIQUE 100% LIBRE DE DROITS */
+/* 🎵 MUSIQUE LIBRE */
 const music = new Audio("https://cdn.pixabay.com/download/audio/2023/03/02/audio_8c00b6fe26.mp3?filename=gentle-piano-hymn-142090.mp3");
 music.preload = "auto";
 music.loop = true;
 music.volume = 1;
 
-/* 📜 TEXTES */
+/* ⚠️ Bloqué tant que l’utilisateur n’a pas cliqué */
+let musicEnabled = false;
+
+function enableMusic() {
+    music.play()
+        .then(() => {
+            music.pause();
+            music.currentTime = 0;
+            musicEnabled = true;
+            alert("🎵 Musique activée ! Vous pouvez maintenant choisir un chant.");
+        })
+        .catch(() => alert("Touchez à nouveau le bouton pour activer la musique."));
+}
+
+/* TEXTES */
 const texts = {
     grandDieu: [
         "Grand Dieu puissant, nous célébrons",
@@ -104,26 +120,28 @@ const texts = {
     ]
 };
 
-/* 🔘 CRÉATION DES BOUTONS */
+/* CRÉATION DES BOUTONS */
 const btns = document.getElementById("buttonsContainer");
 for (let key in texts) {
     let b = document.createElement("button");
     b.textContent = key;
-    b.onclick = () => startSong(key);  // musique + voix dans le même clic
+    b.onclick = () => startSong(key);
     btns.appendChild(b);
 }
 
 let timeouts = [];
 
-/* 🎤 LECTURE + MUSIQUE (fonctionne sur téléphone) */
+/* MUSIQUE + LECTURE */
 function startSong(key) {
 
-    stopAll(); // reset
+    if (!musicEnabled) {
+        alert("🎵 Activez d'abord la musique avec le bouton vert !");
+        return;
+    }
 
-    // 👉 OBLIGATOIRE : lancer la musique sur *le même clic*
-    music.play().catch(() => {
-        alert("Touchez l’écran encore une fois pour autoriser la musique !");
-    });
+    stopAll();
+
+    music.play();
 
     const display = document.getElementById("textDisplay");
     display.innerHTML = "";
@@ -151,6 +169,7 @@ function startSong(key) {
         say.lang = "fr-FR";
         say.pitch = 1.1;
         say.rate = 0.9;
+
         speechSynthesis.speak(say);
 
         i++;
@@ -167,12 +186,14 @@ function pauseAll() {
 }
 function resumeAll() {
     speechSynthesis.resume();
-    music.play();
+    if (musicEnabled) music.play();
 }
 function stopAll() {
     speechSynthesis.cancel();
-    music.pause();
-    music.currentTime = 0;
+    if (musicEnabled) {
+        music.pause();
+        music.currentTime = 0;
+    }
 
     timeouts.forEach(t => clearTimeout(t));
     timeouts = [];
