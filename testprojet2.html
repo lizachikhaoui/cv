@@ -4,7 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Champs joyeux</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px 50px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            max-width: 700px;
+        }
+
+        .text-box {
+            background-color: #eef;
+            border-left: 5px solid #88f;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 150px;
+            font-size: 1.1em;
+            line-height: 1.6em;
+            text-align: left;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .text-box p {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 0.6s forwards;
+            margin: 5px 0;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .buttons button {
+            background-color: #448aff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 5px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .buttons button:hover {
+            background-color: #2962ff;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -12,111 +75,60 @@
         <div id="textDisplay" class="text-box">
             Cliquez sur un bouton pour commencer
         </div>
-        <div class="buttons">
-            <button onclick="showText('grandDieu')">Louange</button>
-            <button onclick="showText('appelez')">Appel aux pécheurs</button>
-            <button onclick="showText('jesus')">Prière à Jésus</button>
+        <div class="buttons" id="buttonsContainer">
+            <!-- Les boutons seront générés automatiquement par JS -->
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Texte à afficher (ajoute ici tes 1000 lignes si nécessaire)
+        const texts = {
+            grandDieu: [
+                "Grand Dieu puissant, nous célébrons",
+                "Ta gloire auguste et ta justice ;",
+                "Devant ton trône nous chantons,",
+                "Rachetés par ton sacrifice."
+            ],
+            appelez: [
+                "Le temps s’enfuit, le Sauveur vous appelle,",
+                "Pécheurs, venez, répondez à sa voix :",
+                "Pour recevoir la couronne immortelle,",
+                "Que Jésus donne à toute âme qui croit."
+            ],
+            jesus: [
+                "Jésus, doux Maître,",
+                "Règne sur moi,",
+                "Soumets mon être,",
+                "Sois-en le Roi ;"
+            ]
+            // Ajoute d'autres sections ici
+        };
+
+        // Génération automatique des boutons pour chaque section
+        const buttonsContainer = document.getElementById('buttonsContainer');
+        Object.keys(texts).forEach(key => {
+            const button = document.createElement('button');
+            button.textContent = key;
+            button.onclick = () => showText(key);
+            buttonsContainer.appendChild(button);
+        });
+
+        // Fonction pour afficher le texte avec animation
+        function showText(key) {
+            const display = document.getElementById("textDisplay");
+            const lines = texts[key];
+            display.innerHTML = ""; // Vide le contenu précédent
+
+            lines.forEach((line, index) => {
+                const p = document.createElement("p");
+                p.textContent = line;
+                p.style.animationDelay = `${index * 0.3}s`; // délai entre chaque ligne
+                display.appendChild(p);
+            });
+
+            // Scroll automatique vers le haut si beaucoup de lignes
+            display.scrollTop = 0;
+        }
+    </script>
 </body>
 </html>
-
-// Texte à afficher
-const texts = {
-    grandDieu: [
-        "Grand Dieu puissant, nous célébrons",
-        "Ta gloire auguste et ta justice ;",
-        "Devant ton trône nous chantons,",
-        "Rachetés par ton sacrifice."
-    ],
-    appelez: [
-        "Le temps s’enfuit, le Sauveur vous appelle,",
-        "Pécheurs, venez, répondez à sa voix :",
-        "Pour recevoir la couronne immortelle,",
-        "Que Jésus donne à toute âme qui croit."
-    ],
-    jesus: [
-        "Jésus, doux Maître,",
-        "Règne sur moi,",
-        "Soumets mon être,",
-        "Sois-en le Roi ;"
-    ]
-};
-
-// Fonction pour afficher le texte avec animation
-function showText(key) {
-    const display = document.getElementById("textDisplay");
-    const lines = texts[key];
-    display.innerHTML = ""; // Vide le contenu précédent
-
-    lines.forEach((line, index) => {
-        const p = document.createElement("p");
-        p.textContent = line;
-        // On ajoute un délai pour l'animation séquentielle
-        p.style.animationDelay = `${index * 0.5}s`;
-        display.appendChild(p);
-    });
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f0f8;
-    color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-.container {
-    text-align: center;
-    background: white;
-    padding: 30px 50px;
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-
-.text-box {
-    background-color: #eef;
-    border-left: 5px solid #88f;
-    padding: 20px;
-    margin: 20px 0;
-    min-height: 150px;
-    font-size: 1.1em;
-    line-height: 1.6em;
-}
-
-.text-box p {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: fadeInUp 0.6s forwards;
-    margin: 5px 0;
-}
-
-/* Animation fade-in + glissement vers le haut */
-@keyframes fadeInUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.buttons button {
-    background-color: #448aff;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    margin: 10px;
-    font-size: 1em;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.buttons button:hover {
-    background-color: #2962ff;
-}
-
