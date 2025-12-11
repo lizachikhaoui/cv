@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Champs joyeux + Lecture audio</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px 50px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            max-width: 700px;
+        }
+
+        .text-box {
+            background-color: #eef;
+            border-left: 5px solid #88f;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 150px;
+            font-size: 1.1em;
+            line-height: 1.6em;
+            text-align: left;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .text-box p {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 0.6s forwards;
+            margin: 5px 0;
+        }
+
+        /* Animation fade-in + glissement vers le haut */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .buttons button {
+            background-color: #448aff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 5px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .buttons button:hover {
+            background-color: #2962ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Champs joyeux</h1>
+
+        <div id="textDisplay" class="text-box">
+            Cliquez sur un bouton pour commencer
+        </div>
+
+        <div class="buttons" id="buttonsContainer"></div>
+    </div>
+
+    <script>
+        // === Texte du chant ===
+        const texts = {
+            grandDieu: [
+                "Grand Dieu puissant, nous célébrons",
+                "Ta gloire auguste et ta justice ;",
+                "Devant ton trône nous chantons,",
+                "Rachetés par ton sacrifice."
+            ],
+            appelez: [
+                "Le temps s’enfuit, le Sauveur vous appelle,",
+                "Pécheurs, venez, répondez à sa voix :",
+                "Pour recevoir la couronne immortelle,",
+                "Que Jésus donne à toute âme qui croit."
+            ],
+            jesus: [
+                "Jésus, doux Maître,",
+                "Règne sur moi,",
+                "Soumets mon être,",
+                "Sois-en le Roi ;"
+            ]
+        };
+
+        // === Génération automatique des boutons ===
+        const buttonsContainer = document.getElementById('buttonsContainer');
+        Object.keys(texts).forEach(key => {
+            const btn = document.createElement('button');
+            btn.textContent = key;
+            btn.onclick = () => showText(key);
+            buttonsContainer.appendChild(btn);
+        });
+
+        // === Fonction pour lire le texte (Text-to-Speech) ===
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "fr-FR";  // VOIX FRANÇAISE
+            utterance.rate = 0.95;     // vitesse un peu plus lente
+            utterance.pitch = 1;       // ton normal
+            speechSynthesis.speak(utterance);
+        }
+
+        // === Fonction pour afficher + lire le texte ligne par ligne ===
+        function showText(key) {
+            const display = document.getElementById("textDisplay");
+            const lines = texts[key];
+            display.innerHTML = "";
+
+            // Stoppe la voix si une lecture est déjà en cours
+            speechSynthesis.cancel();
+
+            lines.forEach((line, index) => {
+                const p = document.createElement("p");
+                p.textContent = line;
+
+                // Animation
+                p.style.animationDelay = `${index * 0.4}s`;
+
+                display.appendChild(p);
+
+                // Lecture audio ligne par ligne
+                setTimeout(() => {
+                    speak(line);
+                }, index * 1500); // lecture espacée pour suivre l'affichage
+            });
+
+            display.scrollTop = 0;
+        }
+    </script>
+</body>
+</html>
