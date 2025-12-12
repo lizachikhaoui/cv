@@ -116,13 +116,11 @@
 /* -----------------------------
        MUSIQUE DE FOND RELAXANTE
 ------------------------------- */
-const music = new Audio("https://cdn.pixabay.com/download/audio/2023/03/28/audio_ced5c7f2dc.mp3?filename=church-ambient-11230.mp3"); // Exemple musique d’église relax
+const music = new Audio("https://www.orangefreesounds.com/wp-content/uploads/2021/04/Dreamy-ambient-music-no-copyright-synth-choir-and-warm-pad.mp3");
 music.loop = true;
 music.volume = 0.5;
-music.play().catch(() => {
-    console.log("Lecture automatique bloquée par le navigateur. Utilise le bouton pour démarrer.");
-});
 
+// Tu peux démarrer la musique manuellement :
 function pauseMusic() { music.pause(); }
 function resumeMusic() { music.play(); }
 function stopMusic() { music.pause(); music.currentTime = 0; }
