@@ -47,24 +47,17 @@
     .karaoke-line {
         opacity: 0.5;
         transition: 0.4s;
-        padding: 3px 0;
-        animation: fadeIn 0.6s ease-in-out;
     }
 
     .active-line {
-        opacity: 1 !important;
-        font-weight: bold;
+        opacity: 1;
         background: #fff59d;
+        font-weight: bold;
     }
 
     .active-word {
         color: #d32f2f;
         font-weight: bold;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
     }
 
     .buttons button {
@@ -87,29 +80,27 @@
 <body>
 
 <div class="container">
-    <h1>Champs joyeux🎤</h1>
+    <h1>Champs joyeux</h1>
 
-    <div id="textDisplay" class="text-box">Clique sur un bouton pour commencer.</div>
+    <div id="textDisplay" class="text-box">Clique sur un chant pour lancer la musique + la voix.</div>
 
-    <!-- Boutons des chants -->
     <div class="buttons" id="buttonsContainer"></div>
 
-    <!-- Nouveaux contrôles -->
     <div class="buttons">
         <button onclick="pauseSong()">Pause</button>
         <button onclick="resumeSong()">Reprendre</button>
         <button onclick="stopSong()">Stop</button>
-        <button onclick="toggleKaraoke()">Mode Karaoké : <span id="karaokeState">ON</span></button>
     </div>
 </div>
 
 <script>
-    // --- MUSIQUE DE FOND ---
-    const music = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_9e0c57b48c.mp3?filename=calm-piano-ambient-110241.mp3");
+    // ---- MUSIQUE ----
+    // Nouvelle musique qui fonctionne dans tous les navigateurs
+    let music = new Audio("https://cdn.pixabay.com/download/audio/2023/03/30/audio_06cd70e332.mp3?filename=uplifting-cinematic-piano-143295.mp3");
+    music.volume = 0.7;
     music.loop = true;
-    music.volume = 0.6;
 
-    // --- TEXTES ---
+    // ---- TEXTES ----
     const texts = {
         grandDieu: [
             "Grand Dieu puissant, nous célébrons",
@@ -131,7 +122,7 @@
         ]
     };
 
-    // --- GÉNÉRATION DES BOUTONS ---
+    // --- Création des boutons
     const container = document.getElementById("buttonsContainer");
     Object.keys(texts).forEach(key => {
         const btn = document.createElement("button");
@@ -141,23 +132,22 @@
     });
 
     let currentTimeouts = [];
-    let karaokeMode = true; // Mode ON
 
-    function toggleKaraoke() {
-        karaokeMode = !karaokeMode;
-        document.getElementById("karaokeState").textContent = karaokeMode ? "ON" : "OFF";
-    }
-
-    // --- LECTURE ---
     function startSong(key) {
-        stopSong();
+        stopSong(); // reset complet
+
+        // IMPORTANT : démarrage musique DOIT être dans un clic direct
+        music = new Audio("https://cdn.pixabay.com/download/audio/2023/03/30/audio_06cd70e332.mp3?filename=uplifting-cinematic-piano-143295.mp3");
+        music.volume = 0.7;
+        music.loop = true;
+        music.play().catch(e => console.log("Blocage navigateur :", e));
 
         const display = document.getElementById("textDisplay");
         display.innerHTML = "";
 
         const lines = texts[key];
 
-        // Affichage initial
+        // Affichage
         lines.forEach(line => {
             const p = document.createElement("p");
             p.className = "karaoke-line";
@@ -165,56 +155,45 @@
             display.appendChild(p);
         });
 
-        const lineElements = document.querySelectorAll(".karaoke-line");
-
+        const lineEls = document.querySelectorAll(".karaoke-line");
         let index = 0;
 
         function singLine() {
             if (index >= lines.length) return;
 
-            // Reset
-            lineElements.forEach(l => l.classList.remove("active-line"));
-            const currentLine = lineElements[index];
-            currentLine.classList.add("active-line");
+            lineEls.forEach(l => l.classList.remove("active-line"));
+            const current = lineEls[index];
+            current.classList.add("active-line");
 
-            const words = currentLine.querySelectorAll("span");
+            const words = current.querySelectorAll("span");
+
+            // Animation mot par mot
             let w = 0;
+            function highlight() {
+                if (w >= words.length) return;
+                words[w].classList.add("active-word");
+                w++;
+                currentTimeouts.push(setTimeout(highlight, 300));
+            }
+            highlight();
 
-            if (karaokeMode) highlightWords(words);
-
-            // Lecture vocale réelle
+            // Lecture vocale
             const utter = new SpeechSynthesisUtterance(lines[index]);
             utter.lang = "fr-FR";
-            utter.rate = 0.95;
+            utter.rate = 1;
             utter.pitch = 1.2;
 
             utter.onend = () => {
                 index++;
-                currentTimeouts.push(setTimeout(singLine, 500));
+                currentTimeouts.push(setTimeout(singLine, 400));
             };
 
             speechSynthesis.speak(utter);
         }
 
-        // --- Animation mot par mot ---
-        function highlightWords(words) {
-            words.forEach(w => w.classList.remove("active-word"));
-            let i = 0;
-
-            function highlight() {
-                if (i >= words.length) return;
-                words[i].classList.add("active-word");
-                i++;
-                currentTimeouts.push(setTimeout(highlight, 300)); // vitesse
-            }
-            highlight();
-        }
-
-        music.play();
         singLine();
     }
 
-    // --- CONTROLES ---
     function pauseSong() {
         speechSynthesis.pause();
         music.pause();
