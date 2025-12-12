@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Champs joyeux</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #d0e4ff, #f8f9ff);
+        overflow: hidden;
+        transition: background 1s;
+    }
+
+    .container {
+        position: relative;
+        z-index: 10;
+        padding: 20px;
+        text-align: center;
+        color: #333;
+    }
+
+    h1 {
+        margin-top: 30px;
+        font-size: 2.3em;
+    }
+
+    #emotionText {
+        margin-top: 30px;
+        font-size: 1.4em;
+        min-height: 140px;
+        padding: 18px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.35);
+        backdrop-filter: blur(6px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6em;
+        white-space: pre-line;
+    }
+
+    button {
+        margin: 10px;
+        padding: 12px 20px;
+        border: none;
+        background: #5d78ff;
+        color: white;
+        border-radius: 10px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #324fff;
+    }
+
+    /* Particules */
+    .particle {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.8;
+        pointer-events: none;
+        animation: float 4s linear forwards;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0) scale(1); }
+        100% { transform: translateY(-200px) scale(0); opacity: 0; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Champs joyeux</h1>
+
+    <div id="emotionText">Choisis une ambiance émotionnelle.</div>
+
+    <button onclick="playEmotion('joie')">🌟 Joie</button>
+    <button onclick="playEmotion('calme')">🌿 Calme</button>
+    <button onclick="playEmotion('energie')">🔥 Énergie</button>
+    <button onclick="playEmotion('douceur')">💗 Douceur</button>
+
+    <div style="margin-top:20px;">
+        <button onclick="resetEmotion()">⏹ Réinitialiser</button>
+    </div>
+</div>
+
+<script>
+/* -----------------------------  
+   TES TEXTES DE CHANTS JOYEUX
+-------------------------------- */
+const chant = [
+    "Grand Dieu puissant, nous célébrons",
+    "Ta gloire auguste et ta justice ;",
+    "Devant ton trône nous chantons,",
+    "Rachetés par ton sacrifice.",
+
+    "",
+    "Le temps s’enfuit, le Sauveur vous appelle,",
+    "Pécheurs, venez, répondez à sa voix :",
+    "Pour recevoir la couronne immortelle,",
+    "Que Jésus donne à toute âme qui croit.",
+
+    "",
+    "Jésus, doux Maître,",
+    "Règne sur moi,",
+    "Soumets mon être,",
+    "Sois-en le Roi."
+];
+
+/* -----------------------------  
+   COULEURS DES ÉMOTIONS
+-------------------------------- */
+const colors = {
+    joie:    ["#fff700", "#ffbb00", "#ffe98a"],
+    calme:   ["#b0eaff", "#78c8ff", "#d4f1ff"],
+    energie: ["#ff3b3b", "#ff6f45", "#ffb347"],
+    douceur: ["#ffb7d5", "#ffcce2", "#ffe6f2"]
+};
+
+let timeoutList = [];
+
+/* -----------------------------  
+   AFFICHAGE DU TEXTE + AMBIANCES
+-------------------------------- */
+function playEmotion(type) {
+    resetEmotion();
+
+    const display = document.getElementById("emotionText");
+
+    let bg1 = colors[type][0];
+    let bg2 = colors[type][1];
+
+    document.body.style.background =
+        `linear-gradient(135deg, ${bg1}, ${bg2})`;
+
+    let i = 0;
+    function showLine() {
+        if (i >= chant.length) return;
+
+        display.innerHTML = chant.slice(0, i + 1).join("\n");
+        createParticles(colors[type][2]);
+        createWave(colors[type][1]);
+
+        i++;
+        timeoutList.push(setTimeout(showLine, 2000));
+    }
+
+    showLine();
+}
+
+/* -----------------------------  
+          PARTICULES
+-------------------------------- */
+function createParticles(color) {
+    for (let i = 0; i < 20; i++) {
+        const p = document.createElement("div");
+        p.className = "particle";
+        p.style.width = p.style.height = (5 + Math.random()*12) + "px";
+        p.style.background = color;
+        p.style.left = (Math.random()*window.innerWidth) + "px";
+        p.style.top = (window.innerHeight - 10) + "px";
+
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 4000);
+    }
+}
+
+/* -----------------------------  
+         ONDES LUMINEUSES
+-------------------------------- */
+function createWave(color) {
+    const wave = document.createElement("div");
+    wave.style.position = "fixed";
+    wave.style.left = "50%";
+    wave.style.top = "50%";
+    wave.style.width = "20px";
+    wave.style.height = "20px";
+    wave.style.borderRadius = "50%";
+    wave.style.background = color;
+    wave.style.opacity = "0.6";
+    wave.style.transform = "translate(-50%, -50%)";
+    wave.style.transition = "transform 1.5s, opacity 1.5s";
+
+    document.body.appendChild(wave);
+
+    setTimeout(() => {
+        wave.style.transform = "translate(-50%, -50%) scale(30)";
+        wave.style.opacity = "0";
+    }, 50);
+
+    setTimeout(() => wave.remove(), 1600);
+}
+
+/* -----------------------------  
+          RESET
+-------------------------------- */
+function resetEmotion() {
+    timeoutList.forEach(t => clearTimeout(t));
+    timeoutList = [];
+
+    document.getElementById("emotionText").innerHTML =
+        "Choisis une ambiance émotionnelle.";
+
+    document.body.style.background =
+        "linear-gradient(135deg, #d0e4ff, #f8f9ff)";
+}
+</script>
+
+</body>
+</html>
