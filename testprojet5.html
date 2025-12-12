@@ -3,192 +3,237 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chants joyeux - Karaoké synchronisé</title>
+<title>Champs joyeux - Version améliorée</title>
+
 <style>
-body {
-    font-family: Arial;
-    background: #eaf0ff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-.container {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    max-width: 700px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    text-align: center;
-}
-.text-box {
-    background: #eef;
-    border-left: 4px solid #77f;
-    padding: 20px;
-    margin: 20px 0;
-    min-height: 150px;
-    max-height: 300px;
-    overflow-y: auto;
-}
-.karaoke-line {
-    opacity: 0.4;
-    transition: .3s;
-    padding: 4px;
-}
-.active-line {
-    background: yellow;
-    opacity: 1 !important;
-    font-weight: bold;
-}
-button {
-    padding: 12px 25px;
-    margin: 5px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1em;
-    background: #448aff;
-    color: white;
-    cursor: pointer;
-}
-button:hover {
-    background: #2962ff;
-}
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #eef2ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        background: white;
+        padding: 30px 50px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        max-width: 700px;
+        text-align: center;
+    }
+
+    h1 {
+        margin-top: 0;
+        font-size: 2em;
+        color: #333;
+    }
+
+    .text-box {
+        background-color: #eef;
+        border-left: 5px solid #88f;
+        padding: 20px;
+        margin: 20px 0;
+        min-height: 150px;
+        font-size: 1.1em;
+        line-height: 1.6em;
+        text-align: left;
+        overflow-y: auto;
+        max-height: 300px;
+    }
+
+    .karaoke-line {
+        opacity: 0.5;
+        transition: 0.4s;
+        padding: 3px 0;
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .active-line {
+        opacity: 1 !important;
+        font-weight: bold;
+        background: #fff59d;
+    }
+
+    .active-word {
+        color: #d32f2f;
+        font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .buttons button {
+        padding: 12px 25px;
+        margin: 5px;
+        font-size: 1em;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        background: #448aff;
+        color: white;
+        transition: 0.3s;
+    }
+
+    .buttons button:hover {
+        background: #2962ff;
+    }
 </style>
 </head>
 <body>
+
 <div class="container">
-    <h1>Chants joyeux</h1>
+    <h1>Champs joyeux — Version améliorée 🎤</h1>
 
-    <div id="textDisplay" class="text-box">
-        Cliquez sur <strong>Activer la musique</strong> puis choisissez un chant.
-    </div>
+    <div id="textDisplay" class="text-box">Clique sur un bouton pour commencer.</div>
 
-    <!-- Bouton musique -->
-    <button id="enableMusicBtn" style="background:#28a745;">🎵 Activer la musique</button>
+    <!-- Boutons des chants -->
+    <div class="buttons" id="buttonsContainer"></div>
 
-    <div id="buttonsContainer"></div>
-
+    <!-- Nouveaux contrôles -->
     <div class="buttons">
-        <button onclick="pauseAll()">Pause</button>
-        <button onclick="resumeAll()">Reprendre</button>
-        <button onclick="stopAll()">Stop</button>
+        <button onclick="pauseSong()">Pause</button>
+        <button onclick="resumeSong()">Reprendre</button>
+        <button onclick="stopSong()">Stop</button>
+        <button onclick="toggleKaraoke()">Mode Karaoké : <span id="karaokeState">ON</span></button>
     </div>
 </div>
 
 <script>
-/* Musique de fond */
-const music = new Audio("https://cdn.pixabay.com/download/audio/2023/03/02/audio_8c00b6fe26.mp3?filename=gentle-piano-hymn-142090.mp3");
-music.loop = true;
-music.volume = 1;
-let musicEnabled = false;
+    // --- MUSIQUE DE FOND ---
+    const music = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_9e0c57b48c.mp3?filename=calm-piano-ambient-110241.mp3");
+    music.loop = true;
+    music.volume = 0.6;
 
-/* Bouton activer musique */
-document.getElementById("enableMusicBtn").onclick = () => {
-    music.play().then(() => {
-        music.pause();
-        music.currentTime = 0;
-        musicEnabled = true;
-        document.getElementById("enableMusicBtn").style.display = "none";
-    });
-};
+    // --- TEXTES ---
+    const texts = {
+        grandDieu: [
+            "Grand Dieu puissant, nous célébrons",
+            "Ta gloire auguste et ta justice ;",
+            "Devant ton trône nous chantons,",
+            "Rachetés par ton sacrifice."
+        ],
+        appelez: [
+            "Le temps s’enfuit, le Sauveur vous appelle,",
+            "Pécheurs, venez, répondez à sa voix :",
+            "Pour recevoir la couronne immortelle,",
+            "Que Jésus donne à toute âme qui croit."
+        ],
+        jesus: [
+            "Jésus, doux Maître,",
+            "Règne sur moi,",
+            "Soumets mon être,",
+            "Sois-en le Roi."
+        ]
+    };
 
-/* Textes */
-const texts = {
-    grandDieu: [
-        "Grand Dieu puissant, nous célébrons",
-        "Ta gloire auguste et ta justice ;",
-        "Devant ton trône nous chantons,",
-        "Rachetés par ton sacrifice."
-    ],
-    appelez: [
-        "Le temps s’enfuit, le Sauveur vous appelle,",
-        "Pécheurs, venez, répondez à sa voix :",
-        "Pour recevoir la couronne immortelle,",
-        "Que Jésus donne à toute âme qui croit."
-    ],
-    jesus: [
-        "Jésus, doux Maître,",
-        "Règne sur moi,",
-        "Soumets mon être,",
-        "Sois-en le Roi."
-    ]
-};
-
-/* Création des boutons pour chaque chant */
-const btns = document.getElementById("buttonsContainer");
-for (let key in texts) {
-    let b = document.createElement("button");
-    b.textContent = key;
-    b.onclick = () => startSong(key);
-    btns.appendChild(b);
-}
-
-let timeouts = [];
-
-/* Fonction principale : karaoké synchronisé */
-function startSong(key) {
-    if (!musicEnabled) return;
-
-    stopAll();
-    music.play();
-
-    const display = document.getElementById("textDisplay");
-    display.innerHTML = "";
-
-    const lines = texts[key];
-
-    lines.forEach(l => {
-        const p = document.createElement("p");
-        p.className = "karaoke-line";
-        p.textContent = l;
-        display.appendChild(p);
+    // --- GÉNÉRATION DES BOUTONS ---
+    const container = document.getElementById("buttonsContainer");
+    Object.keys(texts).forEach(key => {
+        const btn = document.createElement("button");
+        btn.textContent = key;
+        btn.onclick = () => startSong(key);
+        container.appendChild(btn);
     });
 
-    const elems = document.querySelectorAll(".karaoke-line");
-    let i = 0;
+    let currentTimeouts = [];
+    let karaokeMode = true; // Mode ON
 
-    function nextLine() {
-        if (i >= lines.length) return;
-
-        elems.forEach(e => e.classList.remove("active-line"));
-        elems[i].classList.add("active-line");
-
-        /* Lecture vocale TTS */
-        const say = new SpeechSynthesisUtterance(lines[i]);
-        say.lang = "fr-FR";
-        say.pitch = 1.1;
-        say.rate = 0.9;
-        speechSynthesis.speak(say);
-
-        /* Défilement automatique */
-        elems[i].scrollIntoView({behavior:"smooth", block:"center"});
-
-        i++;
-        timeouts.push(setTimeout(nextLine, 2400));
+    function toggleKaraoke() {
+        karaokeMode = !karaokeMode;
+        document.getElementById("karaokeState").textContent = karaokeMode ? "ON" : "OFF";
     }
 
-    nextLine();
-}
+    // --- LECTURE ---
+    function startSong(key) {
+        stopSong();
 
-/* Contrôles */
-function pauseAll() {
-    speechSynthesis.pause();
-    if (musicEnabled) music.pause();
-}
-function resumeAll() {
-    speechSynthesis.resume();
-    if (musicEnabled) music.play();
-}
-function stopAll() {
-    speechSynthesis.cancel();
-    if (musicEnabled) {
+        const display = document.getElementById("textDisplay");
+        display.innerHTML = "";
+
+        const lines = texts[key];
+
+        // Affichage initial
+        lines.forEach(line => {
+            const p = document.createElement("p");
+            p.className = "karaoke-line";
+            p.innerHTML = line.split(" ").map(w => `<span>${w}</span>`).join(" ");
+            display.appendChild(p);
+        });
+
+        const lineElements = document.querySelectorAll(".karaoke-line");
+
+        let index = 0;
+
+        function singLine() {
+            if (index >= lines.length) return;
+
+            // Reset
+            lineElements.forEach(l => l.classList.remove("active-line"));
+            const currentLine = lineElements[index];
+            currentLine.classList.add("active-line");
+
+            const words = currentLine.querySelectorAll("span");
+            let w = 0;
+
+            if (karaokeMode) highlightWords(words);
+
+            // Lecture vocale réelle
+            const utter = new SpeechSynthesisUtterance(lines[index]);
+            utter.lang = "fr-FR";
+            utter.rate = 0.95;
+            utter.pitch = 1.2;
+
+            utter.onend = () => {
+                index++;
+                currentTimeouts.push(setTimeout(singLine, 500));
+            };
+
+            speechSynthesis.speak(utter);
+        }
+
+        // --- Animation mot par mot ---
+        function highlightWords(words) {
+            words.forEach(w => w.classList.remove("active-word"));
+            let i = 0;
+
+            function highlight() {
+                if (i >= words.length) return;
+                words[i].classList.add("active-word");
+                i++;
+                currentTimeouts.push(setTimeout(highlight, 300)); // vitesse
+            }
+            highlight();
+        }
+
+        music.play();
+        singLine();
+    }
+
+    // --- CONTROLES ---
+    function pauseSong() {
+        speechSynthesis.pause();
+        music.pause();
+    }
+
+    function resumeSong() {
+        speechSynthesis.resume();
+        music.play();
+    }
+
+    function stopSong() {
+        speechSynthesis.cancel();
         music.pause();
         music.currentTime = 0;
+
+        currentTimeouts.forEach(t => clearTimeout(t));
+        currentTimeouts = [];
     }
-    timeouts.forEach(t => clearTimeout(t));
-    timeouts = [];
-}
 </script>
+
 </body>
 </html>
