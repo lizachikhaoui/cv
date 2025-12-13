@@ -11,34 +11,24 @@ Cette version vise à ajouter des fonctionnalités diverses:
 
 La musique est pensée pour renforcer l’expérience spirituelle et immersive.
 
-
-
----
-
-⏯️ 2. Contrôles de la musique (nouveaux boutons)
+ 2. Contrôles de la musique (nouveaux boutons)
 
 3 nouveaux boutons dans l’interface :
 
-⏸ Pause musique
+* Pause musique
 
-▶ Reprendre musique
+* Reprendre musique
 
-⏹ Stop musique
-
-
-Fonctions JavaScript associées :
-
-pauseMusic()
-resumeMusic()
-stopMusic()
+* Stop musique
 
 
-👉 L’utilisateur peut maintenant contrôler l’audio librement.
+3. Fonctions JavaScript associées :
 
+* pauseMusic()
+* resumeMusic()
+* stopMusic()
 
----
-
-🎧 3. Gestion du son améliorée
+4. Gestion du son améliorée
 
 Possibilité de :
 
