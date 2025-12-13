@@ -31,19 +31,18 @@ Une gestion explicite de l’état de la synthèse vocale a été ajoutée pour 
 Technologies utilisées dans cette version
 ---
 1 HTML5 : 
-          * Structure sémantique de l’interface.
+* Structure sémantique de l’interface.
 
 2 CSS3 :
-          * Animations (@keyframes)
+* Animations (@keyframes)
 
-          * Mise en page responsive.
+* Mise en page responsive.
 3 JavaScript ES6 :
+* Manipulation du DOM,
 
-          * Manipulation du DOM,
+* Gestion des délais (setTimeout),
 
-          * Gestion des délais (setTimeout),
-
-          * Contrôle de la synthèse vocale.
+* Contrôle de la synthèse vocale.
 
 4 Web Speech API (SpeechSynthesis) :
 
