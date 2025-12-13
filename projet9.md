@@ -1,19 +1,13 @@
 ### Description de la version 9 de mon projet
 ---
-Voici le résumé clair de ce qui a été rajouté dans ce nouveau code, par rapport au précédent 👇
+Cette version vise à ajouter des fonctionnalités diverses:
+1. Musique de fond intégrée
 
+* Ajout d’une musique relaxante en arrière-plan :
 
----
-
-✅ Nouveautés ajoutées dans cette version
-
-🎵 1. Musique de fond intégrée
-
-Ajout d’une musique relaxante en arrière-plan :
-
-const music = new Audio("...");
-music.loop = true;
-music.volume = 0.5;
+* const music = new Audio("...").
+* music.loop = true.
+* music.volume = 0.5.
 
 La musique est pensée pour renforcer l’expérience spirituelle et immersive.
 
