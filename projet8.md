@@ -52,78 +52,35 @@ générées aléatoirement :
 * Supprimées automatiquement après animation.
 
 
-🌊 Ondes lumineuses
+* Ondes lumineuses créées à chaque nouvelle ligne de texte.
 
-Créées à chaque nouvelle ligne de texte.
-
-Donnent un effet de vibration émotionnelle.
+* Donnent un effet de vibration émotionnelle.
 
 
-🖱 Traînées de souris
+6 Animations de l'interface 
 
-Suivent les mouvements de la souris.
+* le clic sur la souris fera des animations sur toute la page.
 
-Couleurs aléatoires avec hsl().
+* Couleurs aléatoires avec hsl().
 
-Effet lumineux et doux.
+* Effet lumineux sur la page
 
+7 Expérience utilisateur (UX)
 
+* Interface simple : un clic = une émotion
 
----
+* Feedback visuel immédiat
 
-5️⃣ Gestion propre de l’état (reset)
+* Aucun rechargement de page
 
-Stockage des setTimeout dans un tableau (timeoutList).
-
-Annulation propre lors de la réinitialisation.
-
-Retour :
-
-au texte initial
-
-au fond par défaut
-
-
-
-👉 Évite les bugs, superpositions et effets persistants.
-
-
----
-
-6️⃣ Expérience utilisateur (UX)
-
-Interface simple : un clic = une émotion
-
-Feedback visuel immédiat
-
-Aucun rechargement de page
-
-Compatible desktop et mobile (viewport responsive)
-
-
-
----
-
-✅ En résumé
+* Compatible desktop et mobile (viewport responsive)
 
 Les principaux changements intégrés sont :
 
-✔ Ambiances émotionnelles dynamiques
-✔ Texte spirituel progressif
-✔ Animations visuelles immersives
-✔ Interaction souris lumineuse
-✔ Gestion propre des états et du reset
-✔ Design moderne et apaisant
+* Ambiances émotionnelles dynamiques
+* Texte spirituel progressif
+* Animations visuelles immersives
+* Interaction souris lumineuse
+* Gestion propre des états et du reset
+* Design moderne et apaisant
 
-
----
-
-Si tu veux, je peux aussi t’aider à :
-
-rédiger la partie “évolutions du projet” pour un rapport
-
-simplifier le code
-
-le rendre responsive mobile
-
-ajouter du son ou de la musique 🎶
