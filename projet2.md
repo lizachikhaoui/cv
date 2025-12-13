@@ -2,10 +2,10 @@
 ---
 Dans cette version le lecteur est orienté sur l'interface comme ceci: 
 ---
-* ** Cliquez sur le texte affiché d  ans l'interface( cliquez sur le bouton pour commencer)ces derniers qui sont des clés de sections précises.
-* ** Clic sur le bouton bleu ci-dessous: grand dieu pour lire les strophes appelées ici grand dieu.
-* ** Clic sur le bouton bleu ci-dessous: Appelez pour lire le texte intitulé ici appelez.
-* ** Clic sur le bouton bleu: Jésus pour lire le texte de Jésus.
+*  Cliquez sur le texte affiché d  ans l'interface( cliquez sur le bouton pour commencer)ces derniers qui sont des clés de sections précises.
+*  Clic sur le bouton bleu ci-dessous: grand dieu pour lire les strophes appelées ici grand dieu.
+*  Clic sur le bouton bleu ci-dessous: Appelez pour lire le texte intitulé ici appelez.
+*  Clic sur le bouton bleu: Jésus pour lire le texte de Jésus.
 
 Cette version est dédiée à la lecture interactive de chants chrétiens. Elle vise à proposer une expérience de lecture structurée, fluide et progressive, mettant en valeur le texte par une présentation rythmée et animée.
 L’objectif principal est de faciliter la lecture contemplative, en laissant à l’utilisateur le contrôle du contenu affiché via une interface simple et intuitive.
