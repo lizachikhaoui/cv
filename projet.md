@@ -1,4 +1,4 @@
-#  Projet de Codage : Lecture Assistée Bilingue (L.A.B.)
+#  Projet de Codage : Lecture Assistée Bilingue
 
 ## Idée du projet :
 Créer une interface web de lecture de livres français où l'utilisateur peut **cliquer sur n'importe quel mot pour afficher sa traduction instantanée** (vers l'anglais, par exemple).
@@ -21,5 +21,5 @@ Ce projet vise à améliorer l'accessibilité des textes et à fluidifier l'appr
 
 * **HTML & CSS** : Structure du livre et style de lecture minimaliste.
 * **JavaScript (ES6+)** : Logique de la décomposition du texte en mots cliquables et gestion des événements.
-* **Librairie anime.js** : Moteur d'animation pour les transitions du *tooltip*.
-* **API de Traduction** : Appel API externe pour obtenir la traduction en ligne.
+* **Librairie anime.js** : Moteur d'animation pour les transitions du *tooltip*, les traductions s'affichent sous forme de tooltip contextuel.
+* **API de Traduction** : Appel API externe pour obtenir la traduction en ligne(via fetch).
