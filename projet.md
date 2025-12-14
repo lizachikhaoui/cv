@@ -23,3 +23,6 @@ Ce projet vise à améliorer l'accessibilité des textes et à fluidifier l'appr
 * **JavaScript (ES6+)** : Logique de la décomposition du texte en mots cliquables et gestion des événements.
 * **Librairie anime.js** : Moteur d'animation pour les transitions du *tooltip*, les traductions s'affichent sous forme de tooltip contextuel.
 * **API de Traduction** : Appel API externe pour obtenir la traduction en ligne(via fetch).
+
+<img width="2843" height="8330" alt="image" src="https://github.com/user-attachments/assets/09d5d9da-6d77-434b-9bbe-deae424f5709" />
+
