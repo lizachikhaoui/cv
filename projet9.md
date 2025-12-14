@@ -40,3 +40,45 @@ Possibilité de :
 
 
 * Volume réglé par défaut (0.5) pour rester doux et non agressif.
+
+flowchart TD
+    A[Chargement de la page HTML] --> B[Chargement du CSS et du DOM]
+    B --> C[Initialisation du script JavaScript]
+
+    C --> D[Création de l'objet Audio]
+    D --> E[Initialisation des variables\nchant, colors, timeoutList]
+
+    E --> F[Affichage du texte par défaut\n"Choisis une ambiance émotionnelle"]
+
+    F --> G{Action utilisateur}
+
+    %% ----------- CHOIX EMOTION -----------
+    G -->|Clic bouton émotion| H[playEmotion(type)]
+    H --> I[resetEmotion()]
+    I --> J[Changement du fond selon l'émotion]
+    J --> K[Initialisation index i = 0]
+
+    K --> L{i < longueur du chant ?}
+    L -->|Oui| M[Afficher lignes du chant]
+    M --> N[Créer particules colorées]
+    N --> O[Créer onde lumineuse]
+    O --> P[setTimeout 2s → ligne suivante]
+    P --> L
+    L -->|Non| F
+
+    %% ----------- RESET -----------
+    G -->|Clic Réinitialiser| R[resetEmotion()]
+    R --> S[Arrêt des timeouts]
+    S --> T[Réinitialisation du texte]
+    T --> U[Réinitialisation du fond]
+
+    %% ----------- MUSIQUE -----------
+    G -->|Pause musique| V[pauseMusic()]
+    G -->|Reprendre musique| W[resumeMusic()]
+    G -->|Stop musique| X[stopMusic()]
+
+    %% ----------- MOUVEMENT SOURIS -----------
+    C --> Y[Écouteur mousemove]
+    Y --> Z[Création traînée lumineuse]
+    Z --> AA[Animation + suppression après 1s]
+
