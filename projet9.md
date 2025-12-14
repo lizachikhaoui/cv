@@ -82,3 +82,14 @@ flowchart TD
     Y --> Z[Création traînée lumineuse]
     Z --> AA[Animation + suppression après 1s]
 
+    ## Diagramme de flux disponible sur le repository "diagramme"
+
+    # Les IAG utilisés: Gemini pour la visualisation d'exemple et l'aide dans le code
+
+    J'ai utilisé les sources techniques fourni par le professeur: https://docs.mermaidchart.com/mermaid-oss/syntax/flowchart.html ...
+
+    Exemple de prompts: Comment fonctionne l’API fetch en JavaScript pour appeler une API de traduction ?
+    Génère un exemple de code JavaScript qui découpe un texte en mots cliquables.
+
+
+
